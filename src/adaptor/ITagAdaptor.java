@@ -18,7 +18,7 @@ public interface ITagAdaptor {
 	
 	public String discoverAllTagsNearby(double longitude, double latitude);
 	
-	public String updateITag(ITag tag);
+	public String updateITag(int iTagId, String content);
 	
 	public String deleteITag(int tagId);
 

@@ -6,8 +6,10 @@ package adaptor;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
+import db.DBAdaptor;
 import model.ITag;
-import util.DBAdaptor;
 
 /**
  * @author xingyuchen
@@ -18,35 +20,37 @@ public class ITagAdaptorImp implements ITagAdaptor {
 	@Override
 	public String getAllITagsByUserId(int userId) {
 		ArrayList<ITag> itags = DBAdaptor.getAllITagsByUserId(userId);
-		return null;
+		String result = new Gson().toJson(itags);
+		return result;
 	}
 
 
 	@Override
 	public String createNewITag(ITag tag) {
-		// TODO Auto-generated method stub
-		return null;
+		boolean result = DBAdaptor.createNewITag(tag);
+		return result + "";
 	}
 
 
 	@Override
 	public String discoverAllTagsNearby(double longitude, double latitude) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<ITag> itags = DBAdaptor.getAllITagsNearBy(longitude, latitude);
+		String result = new Gson().toJson(itags);
+		return result;
 	}
 
 
 	@Override
-	public String updateITag(ITag tag) {
-		// TODO Auto-generated method stub
-		return null;
+	public String updateITag(int iTagId, String content) {
+		boolean result = DBAdaptor.updateITag(iTagId, content);
+		return result + "";
 	}
 
 
 	@Override
 	public String deleteITag(int tagId) {
-		// TODO Auto-generated method stub
-		return null;
+		boolean result = DBAdaptor.deleteITag(tagId);
+		return result + "";
 	}
 
 }

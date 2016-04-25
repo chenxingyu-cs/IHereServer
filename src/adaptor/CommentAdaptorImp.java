@@ -6,8 +6,8 @@ package adaptor;
 
 import java.util.ArrayList;
 
+import db.DBAdaptor;
 import model.Comment;
-import util.DBAdaptor;
 
 /**
  * @author xingyuchen
@@ -18,6 +18,7 @@ public class CommentAdaptorImp implements CommentAdaptor{
 	@Override
 	public String getAllCommentsByITagId(int tagId) {
 		ArrayList<Comment> comments = DBAdaptor.getAllCommentsByITagId(tagId);
+		comments.size();
 		return null;
 	}
 

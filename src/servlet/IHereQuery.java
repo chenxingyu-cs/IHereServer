@@ -14,7 +14,6 @@ import adaptor.UserAdaptorImp;
 import model.Comment;
 import model.ITag;
 import model.User;
-import util.DBAdaptor;
 
 /**
  * Servlet implementation class IHereQuery
@@ -67,11 +66,15 @@ public class IHereQuery extends HttpServlet {
 			email = request.getParameter("email");
 			password = request.getParameter("password");
 			String userName = request.getParameter("userName");
-			User user2 = new User();
-			result = userAdaptorImp.createNewUser(user2);
+			result = userAdaptorImp.createNewUser(email, password, userName);
 			break;
 		case UPDATE_USER_INFO:
 			User user = new User();
+			user.setEmail(request.getParameter("email"));
+			user.setPassword(request.getParameter("password"));
+			user.setDescription(request.getParameter("description"));
+			user.setUserName(request.getParameter("userName"));
+			user.setGender(Integer.parseInt(request.getParameter("gender")));
 			result = userAdaptorImp.updateUserInfo(user);
 			break;
 		case GET_ALL_ITAGS_BY_USER_ID:
@@ -80,6 +83,10 @@ public class IHereQuery extends HttpServlet {
 			break;
 		case CREATE_NEW_ITAG:
 			ITag iTag = new ITag();
+			iTag.setLatitude(Float.parseFloat(request.getParameter("latitude")));
+			iTag.setLongitude(Float.parseFloat(request.getParameter("longitude")));
+			iTag.setContent(request.getParameter("content"));
+			iTag.setUserId(Integer.parseInt(request.getParameter("userId")));
 			result = itagAdaptorImp.createNewITag(iTag);
 			break;
 		case DISCOVER_ITAGS_AROUND:
@@ -88,12 +95,14 @@ public class IHereQuery extends HttpServlet {
 			result = itagAdaptorImp.discoverAllTagsNearby(longitude, latitude);
 			break;
 		case UPDATE_ITAG_INFO:
-			ITag iTag2 = new ITag();
-			result = itagAdaptorImp.updateITag(iTag2);
+			int iTagId = Integer.parseInt(request.getParameter("iTagId"));
+			String content = request.getParameter("content");
+			result = itagAdaptorImp.updateITag(iTagId, content);
 			break;
 		case DELETE_ITAG:
-			int tagId2 = Integer.parseInt(request.getParameter("userId"));
+			int tagId2 = Integer.parseInt(request.getParameter("iTagId"));
 			result = itagAdaptorImp.deleteITag(tagId2);
+			break;
 		case GET_ALL_COMMENT_BY_ITAG_ID:
 			int tagId = Integer.parseInt(request.getParameter("tagId"));
 			result = commentAdaptorImp.getAllCommentsByITagId(tagId);
@@ -115,17 +124,17 @@ public class IHereQuery extends HttpServlet {
 		}
 		
 		
+//	    response.setContentType("application/json");
+//	    response.setCharacterEncoding("UTF-8");
+//	    response.getWriter().write(json);
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
-		out.print("<html><body>");
+
 		out.print(result);
-		out.print("</body></html>");
 		
-//	    response.setContentType("application/json");
-//	    response.setCharacterEncoding("UTF-8");
-//	    response.getWriter().write(json);
+
 	}
 
 }
