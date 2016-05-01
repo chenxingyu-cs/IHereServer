@@ -17,14 +17,14 @@ public class ITag {
     private String content;
     private float longitude;
     private float latitude;
-    private Date date;
+    private String date;
     private ArrayList<Comment> comments;
 
     public ITag() {
         super();
     }
 
-    public ITag(int userId, String content, float longitude, Date date, float latitude, ArrayList<Comment> comments) {
+    public ITag(int userId, String content, float longitude, String date, float latitude, ArrayList<Comment> comments) {
         this.userId = userId;
         this.content = content;
         this.longitude = longitude;
@@ -73,11 +73,11 @@ public class ITag {
         this.latitude = latitude;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

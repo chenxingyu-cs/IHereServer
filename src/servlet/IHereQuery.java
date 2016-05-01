@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import adaptor.CommentAdaptorImp;
 import adaptor.ITagAdaptorImp;
 import adaptor.UserAdaptorImp;
@@ -33,6 +37,7 @@ public class IHereQuery extends HttpServlet {
 	private static final int CREATE_NEW_COMMENT = 10;
 	private static final int UPDATE_COMMENT_INFO = 11;
 	private static final int DELETE_COMMENT = 12;
+	private static final int GET_ITAG_BY_ITAG_ID = 13;
 	
 	private UserAdaptorImp userAdaptorImp = new UserAdaptorImp();
 	private ITagAdaptorImp itagAdaptorImp = new ITagAdaptorImp();
@@ -63,6 +68,7 @@ public class IHereQuery extends HttpServlet {
 			result = userAdaptorImp.getUserInfo(email, password);
 			break;
 		case CREATE_NEW_USER:
+			Gson gson = new GsonBuilder().create();
 			email = request.getParameter("email");
 			password = request.getParameter("password");
 			String userName = request.getParameter("userName");
@@ -83,10 +89,15 @@ public class IHereQuery extends HttpServlet {
 			break;
 		case CREATE_NEW_ITAG:
 			ITag iTag = new ITag();
-			iTag.setLatitude(Float.parseFloat(request.getParameter("latitude")));
-			iTag.setLongitude(Float.parseFloat(request.getParameter("longitude")));
-			iTag.setContent(request.getParameter("content"));
-			iTag.setUserId(Integer.parseInt(request.getParameter("userId")));
+			gson = new GsonBuilder().create();
+			System.out.println(request.getParameter("itag"));
+			iTag = gson.fromJson(request.getParameter("itag"), new TypeToken<ITag>(){}.getType());
+			System.out.println(iTag.getDate());
+			
+//			iTag.setLatitude(Float.parseFloat(request.getParameter("latitude")));
+//			iTag.setLongitude(Float.parseFloat(request.getParameter("longitude")));
+//			iTag.setContent(request.getParameter("content"));
+//			iTag.setUserId(Integer.parseInt(request.getParameter("userId")));
 			result = itagAdaptorImp.createNewITag(iTag);
 			break;
 		case DISCOVER_ITAGS_AROUND:
@@ -122,6 +133,10 @@ public class IHereQuery extends HttpServlet {
 		case DELETE_COMMENT:
 			commentId = Integer.parseInt(request.getParameter("commentId"));
 			result = commentAdaptorImp.deleteComment(commentId);
+			break;
+		case GET_ITAG_BY_ITAG_ID:
+			iTagId = Integer.parseInt(request.getParameter("iTagId"));
+			result = itagAdaptorImp.getItagById(iTagId);
 			break;
 		default:
 			break;

@@ -53,4 +53,12 @@ public class ITagAdaptorImp implements ITagAdaptor {
 		return result + "";
 	}
 
+
+	@Override
+	public String getItagById(int iTagId) {
+		ITag itag = DBAdaptor.getItagById(iTagId);
+		String result = new Gson().toJson(itag);
+		return result;
+	}
+
 }

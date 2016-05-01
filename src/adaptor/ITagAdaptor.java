@@ -21,5 +21,7 @@ public interface ITagAdaptor {
 	public String updateITag(int iTagId, String content);
 	
 	public String deleteITag(int tagId);
+	
+	public String getItagById(int iTagId);
 
 }

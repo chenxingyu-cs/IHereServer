@@ -9,9 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import com.sun.org.apache.regexp.internal.recompile;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import model.Comment;
 import model.ITag;
@@ -50,7 +55,7 @@ public class DBAdaptor {
 	public static User getUserInfo(String email, String password) {
 		User user = new User();
 
-//		String sql = "SELECT * FROM User WHERE email = '" + email + "';";
+//		String sql = "SELECT * FROM user WHERE email = '" + email + "';";
 //
 //		try {
 //			Statement stmt = connection.createStatement();
@@ -73,7 +78,7 @@ public class DBAdaptor {
 //			user.setUserId(0);
 //		}
 
-		user.setUserId(10000);
+		user.setUserId(1);
 		user.setEmail("flubber@ihere.com");
 		user.setUserName("Flubber");
 		user.setPassword("123455");
@@ -93,11 +98,12 @@ public class DBAdaptor {
 		ArrayList<ITag> iTags = new ArrayList<>();
 		iTags.add(iTag);
 		user.setTags(iTags);
+		System.out.println("Login request handled");
 		return user;
 	}
 
 	public static boolean createNewUser(User user) {
-		String sql = "insert into User (email, password, user_name)" + "values (?, ?, ?);";
+		String sql = "insert into user (email, password, user_name)" + "values (?, ?, ?);";
 		try {
 
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -111,7 +117,7 @@ public class DBAdaptor {
 			return false;
 		}
 		
-		sql = "SELECT * FROM User ORDER BY user_id DESC limit 1";
+		sql = "SELECT * FROM user ORDER BY user_id DESC limit 1";
 
 		try {
 			Statement stmt = connection.createStatement();
@@ -129,7 +135,7 @@ public class DBAdaptor {
 	}
 
 	public static boolean updateUserInfo(User user) {
-		String sql = "update User SET user_name = ?, description = ?, gender = ?" + " WHERE email = ?;";
+		String sql = "update user SET user_name = ?, description = ?, gender = ?" + " WHERE email = ?;";
 		try {
 
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -174,15 +180,21 @@ public class DBAdaptor {
 	}
 
 	public static boolean createNewITag(ITag tag) {
-		String sql = "insert into itag (user_id, content, longitude, latitude)" + "values (?, ?, ?, ?);";
+		String sql = "insert into itag (user_id, content, longitude, latitude, date)" + "values (?, ?, ?, ?, ?);";
 		try {
-
+			Date date = new Date();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
+			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+			
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, tag.getUserId());
 			preparedStatement.setString(2, tag.getContent());
 			preparedStatement.setFloat(3, tag.getLongitude());
 			preparedStatement.setFloat(4, tag.getLatitude());
+			preparedStatement.setDate(5, sqlDate);
 			preparedStatement.executeUpdate();
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -321,6 +333,30 @@ public class DBAdaptor {
 		}
 
 		return true;
+	}
+	
+	public static ITag getItagById(int itagId) {
+		ITag iTag = new ITag();
+
+		String sql = "SELECT * FROM itag WHERE tag_id = " + itagId + ";";
+
+		try {
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				iTag.setContent(rs.getString("content"));
+				iTag.setUserId(rs.getInt("user_id"));
+				iTag.setiTagId(rs.getInt("tag_id"));
+				iTag.setLongitude(rs.getFloat("longitude"));
+				iTag.setLatitude(rs.getFloat("latitude"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return iTag;
 	}
 
 }
