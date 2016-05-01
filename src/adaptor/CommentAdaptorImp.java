@@ -6,6 +6,8 @@ package adaptor;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import db.DBAdaptor;
 import model.Comment;
 
@@ -18,29 +20,29 @@ public class CommentAdaptorImp implements CommentAdaptor{
 	@Override
 	public String getAllCommentsByITagId(int tagId) {
 		ArrayList<Comment> comments = DBAdaptor.getAllCommentsByITagId(tagId);
-		comments.size();
-		return null;
+		String result = new Gson().toJson(comments);
+		return result;
 	}
 
 
 	@Override
 	public String createNewComment(Comment comment) {
-		// TODO Auto-generated method stub
-		return null;
+		boolean result = DBAdaptor.createNewComment(comment);
+		return result + "";
 	}
 
 
 	@Override
-	public String updateComment(Comment comment) {
-		// TODO Auto-generated method stub
-		return null;
+	public String updateComment(int commentId, String content) {
+		boolean result = DBAdaptor.updateComment(commentId, content);
+		return result + "";
 	}
 
 
 	@Override
 	public String deleteComment(int commentId) {
-		// TODO Auto-generated method stub
-		return null;
+		boolean result = DBAdaptor.deleteComment(commentId);
+		return result + "";
 	}
 
 }

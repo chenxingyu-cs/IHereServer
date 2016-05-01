@@ -100,23 +100,27 @@ public class IHereQuery extends HttpServlet {
 			result = itagAdaptorImp.updateITag(iTagId, content);
 			break;
 		case DELETE_ITAG:
-			int tagId2 = Integer.parseInt(request.getParameter("iTagId"));
-			result = itagAdaptorImp.deleteITag(tagId2);
+			iTagId = Integer.parseInt(request.getParameter("iTagId"));
+			result = itagAdaptorImp.deleteITag(iTagId);
 			break;
 		case GET_ALL_COMMENT_BY_ITAG_ID:
-			int tagId = Integer.parseInt(request.getParameter("tagId"));
-			result = commentAdaptorImp.getAllCommentsByITagId(tagId);
+			iTagId = Integer.parseInt(request.getParameter("iTagId"));
+			result = commentAdaptorImp.getAllCommentsByITagId(iTagId);
 			break;
 		case CREATE_NEW_COMMENT:
 			Comment comment = new Comment();
+			comment.setiTagId(Integer.parseInt(request.getParameter("iTagId")));
+			comment.setUserId(Integer.parseInt(request.getParameter("userId")));
+			comment.setContent(request.getParameter("content"));
 			result = commentAdaptorImp.createNewComment(comment);
 			break;
 		case UPDATE_COMMENT_INFO:
-			Comment comment2 = new Comment();
-			result = commentAdaptorImp.updateComment(comment2);
+			int commentId = Integer.parseInt(request.getParameter("commentId"));
+			content = request.getParameter("content");
+			result = commentAdaptorImp.updateComment(commentId, content);
 			break;
 		case DELETE_COMMENT:
-			int commentId = Integer.parseInt(request.getParameter("commentId"));
+			commentId = Integer.parseInt(request.getParameter("commentId"));
 			result = commentAdaptorImp.deleteComment(commentId);
 			break;
 		default:

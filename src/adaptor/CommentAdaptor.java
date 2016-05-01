@@ -16,7 +16,7 @@ public interface CommentAdaptor {
 	
 	public String createNewComment(Comment comment);
 	
-	public String updateComment(Comment comment);
+	public String updateComment(int commentId, String content);
 	
 	public String deleteComment(int commentId);
 	

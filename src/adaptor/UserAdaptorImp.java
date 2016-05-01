@@ -5,12 +5,9 @@
 package adaptor;
 
 import com.google.gson.Gson;
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-import com.sun.jndi.url.dns.dnsURLContext;
 
 import db.DBAdaptor;
 import model.User;
-import sun.launcher.resources.launcher;
 
 /**
  * @author xingyuchen
@@ -34,7 +31,14 @@ public class UserAdaptorImp implements UserAdaptor {
 		user.setPassword(password);
 		user.setUserName(userName);
 		boolean result = DBAdaptor.createNewUser(user);
-		return result + "";
+		if (result) {
+			String response = new Gson().toJson(user);
+			return response;
+		}
+		user = new User();
+		user.setUserId(0);
+		String response = new Gson().toJson(user);
+		return response;
 	}
 
 
