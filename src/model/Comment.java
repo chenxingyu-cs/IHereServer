@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author xingyuchen
- *
+ * Comment class for store comment information
  */
 public class Comment {
     private int commentId;

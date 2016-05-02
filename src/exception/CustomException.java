@@ -6,8 +6,10 @@ package exception;
 
 /**
  * @author xingyuchen
- *
+ * Used for handling exceptions
  */
 public class CustomException {
-
+	public void handle() {
+		System.out.println("Something wrong with the request");
+	}
 }

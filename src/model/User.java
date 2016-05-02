@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * @author xingyuchen
- *
+ * User class for store the user infomation
  */
 public class User {
     private int userId;

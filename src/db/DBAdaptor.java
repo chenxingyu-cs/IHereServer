@@ -9,10 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-
-import com.sun.org.apache.regexp.internal.recompile;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -24,7 +21,7 @@ import model.User;
 
 /**
  * @author xingyuchen
- *
+ * Used to handle connection with database
  */
 public class DBAdaptor {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -35,6 +32,7 @@ public class DBAdaptor {
 
 	static Connection connection;
 
+	// Set the connection with MySQL database
 	static {
 		try {
 			try {
@@ -169,6 +167,7 @@ public class DBAdaptor {
 				tag.setLongitude(rs.getFloat("longitude"));
 				tag.setLatitude(rs.getFloat("latitude"));
 				tag.setUserId(rs.getInt("user_id"));
+				tag.setDate(rs.getTimestamp("date"));
 				tags.add(tag);
 			}
 
@@ -184,15 +183,17 @@ public class DBAdaptor {
 		try {
 			Date date = new Date();
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
-			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+			String currentTime = simpleDateFormat.format(tag.getDate());
+			java.sql.Date sqlDate = new java.sql.Date(tag.getDate().getTime());
+			System.out.println(tag.getDate());
+			System.out.println(sqlDate.toString());
 			
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, tag.getUserId());
 			preparedStatement.setString(2, tag.getContent());
 			preparedStatement.setFloat(3, tag.getLongitude());
 			preparedStatement.setFloat(4, tag.getLatitude());
-			preparedStatement.setDate(5, sqlDate);
+			preparedStatement.setString(5, currentTime);
 			preparedStatement.executeUpdate();
 			
 
@@ -220,6 +221,7 @@ public class DBAdaptor {
 				tag.setLongitude(rs.getFloat("longitude"));
 				tag.setLatitude(rs.getFloat("latitude"));
 				tag.setUserId(rs.getInt("user_id"));
+				tag.setDate(rs.getTimestamp("date"));
 				tags.add(tag);
 			}
 
@@ -350,6 +352,9 @@ public class DBAdaptor {
 				iTag.setiTagId(rs.getInt("tag_id"));
 				iTag.setLongitude(rs.getFloat("longitude"));
 				iTag.setLatitude(rs.getFloat("latitude"));
+				iTag.setDate(rs.getTimestamp("date"));
+				ArrayList<Comment> comments = getAllCommentsByITagId(rs.getInt("tag_id"));
+				iTag.setComments(comments);
 			}
 
 		} catch (SQLException e) {
@@ -357,6 +362,26 @@ public class DBAdaptor {
 		}
 
 		return iTag;
+	}
+	
+	public static String getUserName(int userId) {
+		String result = "";
+		
+		String sql = "SELECT * FROM user WHERE user_id = " + userId + ";";
+
+		try {
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				result = rs.getString("user_name");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 }

@@ -13,7 +13,7 @@ import model.Comment;
 
 /**
  * @author xingyuchen
- *
+ * The implementation of commentadaptor
  */
 public class CommentAdaptorImp implements CommentAdaptor{
 

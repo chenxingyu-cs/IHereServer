@@ -11,7 +11,7 @@ import model.User;
 
 /**
  * @author xingyuchen
- *
+ * The implementation of UserAdaptor
  */
 public class UserAdaptorImp implements UserAdaptor {
 
@@ -46,6 +46,12 @@ public class UserAdaptorImp implements UserAdaptor {
 	public String updateUserInfo(User user) {
 		boolean result = DBAdaptor.updateUserInfo(user);
 		return result + "";
+	}
+
+	
+	@Override
+	public String getUserName(int userId) {
+		return DBAdaptor.getUserName(userId);
 	}
 
 }
