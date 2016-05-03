@@ -53,50 +53,50 @@ public class DBAdaptor {
 	public static User getUserInfo(String email, String password) {
 		User user = new User();
 
-//		String sql = "SELECT * FROM user WHERE email = '" + email + "';";
-//
-//		try {
-//			Statement stmt = connection.createStatement();
-//			ResultSet rs = stmt.executeQuery(sql);
-//			if (rs.next()) {
-//				if (rs.getString("password").equals(password)) {
-//					user.setEmail(email);
-//					user.setPassword(rs.getString("password"));
-//					user.setUserId(rs.getInt("user_id"));
-//					user.setUserName(rs.getString("user_name"));
-//					user.setDescription(rs.getString("description"));
-//					user.setGender(rs.getInt("gender"));
-//				} else {
-//					user.setUserId(0);
-//				}
-//			}
-//
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			user.setUserId(0);
-//		}
+		String sql = "SELECT * FROM user WHERE email = '" + email + "';";
 
-		user.setUserId(1);
-		user.setEmail("flubber@ihere.com");
-		user.setUserName("Flubber");
-		user.setPassword("123455");
-		Comment comment = new Comment();
-		comment.setCommentId(1);
-		comment.setContent("First Comment");
-		Comment comment2 = new Comment();
-		comment2.setCommentId(2);
-		comment2.setContent("Second Comment");
-		ArrayList<Comment> comments = new ArrayList<>();
-		comments.add(comment);
-		comments.add(comment2);
-		ITag iTag = new ITag();
-		iTag.setiTagId(1);
-		iTag.setContent("First ITag");
-		iTag.setComments(comments);
-		ArrayList<ITag> iTags = new ArrayList<>();
-		iTags.add(iTag);
-		user.setTags(iTags);
-		System.out.println("Login request handled");
+		try {
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				if (rs.getString("password").equals(password)) {
+					user.setEmail(email);
+					user.setPassword(rs.getString("password"));
+					user.setUserId(rs.getInt("user_id"));
+					user.setUserName(rs.getString("user_name"));
+					user.setDescription(rs.getString("description"));
+					user.setGender(rs.getInt("gender"));
+				} else {
+					user.setUserId(0);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			user.setUserId(0);
+		}
+
+//		user.setUserId(1);
+//		user.setEmail("flubber@ihere.com");
+//		user.setUserName("Flubber");
+//		user.setPassword("123455");
+//		Comment comment = new Comment();
+//		comment.setCommentId(1);
+//		comment.setContent("First Comment");
+//		Comment comment2 = new Comment();
+//		comment2.setCommentId(2);
+//		comment2.setContent("Second Comment");
+//		ArrayList<Comment> comments = new ArrayList<>();
+//		comments.add(comment);
+//		comments.add(comment2);
+//		ITag iTag = new ITag();
+//		iTag.setiTagId(1);
+//		iTag.setContent("First ITag");
+//		iTag.setComments(comments);
+//		ArrayList<ITag> iTags = new ArrayList<>();
+//		iTags.add(iTag);
+//		user.setTags(iTags);
+//		System.out.println("Login request handled");
 		return user;
 	}
 
@@ -164,10 +164,12 @@ public class DBAdaptor {
 				ITag tag = new ITag();
 				tag.setiTagId(rs.getInt("tag_id"));
 				tag.setContent(rs.getString("content"));
-				tag.setLongitude(rs.getFloat("longitude"));
-				tag.setLatitude(rs.getFloat("latitude"));
+				tag.setLongitude(rs.getDouble("longitude"));
+				tag.setLatitude(rs.getDouble("latitude"));
 				tag.setUserId(rs.getInt("user_id"));
 				tag.setDate(rs.getTimestamp("date"));
+				String userName = getUserName(rs.getInt("user_id"));
+				tag.setUserName(userName);
 				tags.add(tag);
 			}
 
@@ -191,8 +193,8 @@ public class DBAdaptor {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, tag.getUserId());
 			preparedStatement.setString(2, tag.getContent());
-			preparedStatement.setFloat(3, tag.getLongitude());
-			preparedStatement.setFloat(4, tag.getLatitude());
+			preparedStatement.setDouble(3, tag.getLongitude());
+			preparedStatement.setDouble(4, tag.getLatitude());
 			preparedStatement.setString(5, currentTime);
 			preparedStatement.executeUpdate();
 			
@@ -218,10 +220,12 @@ public class DBAdaptor {
 				ITag tag = new ITag();
 				tag.setiTagId(rs.getInt("tag_id"));
 				tag.setContent(rs.getString("content"));
-				tag.setLongitude(rs.getFloat("longitude"));
-				tag.setLatitude(rs.getFloat("latitude"));
+				tag.setLongitude(rs.getDouble("longitude"));
+				tag.setLatitude(rs.getDouble("latitude"));
 				tag.setUserId(rs.getInt("user_id"));
 				tag.setDate(rs.getTimestamp("date"));
+				String userName = getUserName(rs.getInt("user_id"));
+				tag.setUserName(userName);
 				tags.add(tag);
 			}
 
@@ -278,6 +282,8 @@ public class DBAdaptor {
 				comment.setCommentId(rs.getInt("comment_id"));
 				comment.setUserId(rs.getInt("user_id"));
 				comment.setContent(rs.getString("content"));
+				String userName = getUserName(rs.getInt("user_id"));
+				comment.setUserName(userName);
 				comments.add(comment);
 			}
 
@@ -350,11 +356,13 @@ public class DBAdaptor {
 				iTag.setContent(rs.getString("content"));
 				iTag.setUserId(rs.getInt("user_id"));
 				iTag.setiTagId(rs.getInt("tag_id"));
-				iTag.setLongitude(rs.getFloat("longitude"));
-				iTag.setLatitude(rs.getFloat("latitude"));
+				iTag.setLongitude(rs.getDouble("longitude"));
+				iTag.setLatitude(rs.getDouble("latitude"));
 				iTag.setDate(rs.getTimestamp("date"));
 				ArrayList<Comment> comments = getAllCommentsByITagId(rs.getInt("tag_id"));
 				iTag.setComments(comments);
+				String userName = getUserName(rs.getInt("user_id"));
+				iTag.setUserName(userName);
 			}
 
 		} catch (SQLException e) {

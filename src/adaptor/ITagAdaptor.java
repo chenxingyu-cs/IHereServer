@@ -32,7 +32,7 @@ public interface ITagAdaptor {
 	 * @return
 	 * Return all the itags around
 	 */
-	public String discoverAllTagsNearby(double longitude, double latitude);
+	public String discoverAllTagsNearby(double longitude, double latitude, double direction);
 	
 	/**
 	 * @param iTagId

@@ -105,9 +105,10 @@ public class IHereQuery extends HttpServlet {
 				result = itagAdaptorImp.createNewITag(iTag);
 				break;
 			case DISCOVER_ITAGS_AROUND:
-				float longitude = Float.parseFloat(request.getParameter("longitude"));
-				float latitude = Float.parseFloat(request.getParameter("latitude"));
-				result = itagAdaptorImp.discoverAllTagsNearby(longitude, latitude);
+				double longitude = Double.parseDouble(request.getParameter("longitude"));
+				double latitude = Double.parseDouble(request.getParameter("latitude"));
+				double direction = Double.parseDouble(request.getParameter("direction"));
+				result = itagAdaptorImp.discoverAllTagsNearby(longitude, latitude, direction);
 				break;
 			case UPDATE_ITAG_INFO:
 				int iTagId = Integer.parseInt(request.getParameter("iTagId"));

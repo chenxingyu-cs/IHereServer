@@ -16,8 +16,17 @@ public class Comment {
     private int userId;
     private String content;
     private Date date;
+    private String userName;
 
-    public Comment() {
+    public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public Comment() {
         super();
     }
 
